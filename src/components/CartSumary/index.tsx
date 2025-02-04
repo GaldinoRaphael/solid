@@ -1,6 +1,7 @@
 import { ShoppingBagIcon } from "../../common/icons/ShoppingBagIcon";
 import { Product } from "../../common/types/product";
 import Button from "../Button";
+import { CartActions } from "../CartActions";
 import Divider from "../Divider";
 import Field from "../Field";
 import Typography from "../Typography";
@@ -44,14 +45,6 @@ export const CartSumary = ({cartItems, total, freight, handleRedirect}: CartSuma
         R$ {total + freight}
       </Typography>
     </div>
-    <div className={Styles.cartActions}>
-      <Button
-        onClick={handleRedirect}
-        variant="secondary"
-      >Continuar comprando</Button>
-      <Button
-        onClick={() => console.log("pagamento")}
-      >Ir para pagamento</Button>
-    </div>
+    <CartActions handleRedirect={handleRedirect}/>
   </div>
 )
