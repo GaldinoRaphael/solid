@@ -7,6 +7,9 @@ import Styles from "./CartPage.module.css";
 import { useNavigate } from "react-router-dom";
 
 import { Product } from "../../common/types/product";
+import { CartItem } from "../../components/CartItem";
+import { CartSumary } from "../../components/CartSumary";
+import { CartEmpty } from "../../components/CartEmpty";
 
 type CartPageProps = {
   cartItems: Product[];
@@ -39,82 +42,13 @@ const CartPage = ({ cartItems, removeFromCart }: CartPageProps) => {
           </Typography>
           {cartItems?.length > 0 ? (
             cartItems.map((item) => (
-              <div key={item.id} className={Styles.cartItem}>
-                <div className={Styles.cartImageContainer}>
-                  <img src={item.imageSrc} alt={item.label} />
-                </div>
-                <div className={Styles.itemDetails}>
-                  <div className={Styles.itemDescription}>
-                    <Typography variantStyle="h6-small">
-                      {item.label}
-                    </Typography>
-                    <Typography variantStyle="body">
-                      {item.description}
-                    </Typography>
-                  </div>
-                  <Typography variantStyle="body-semi-bold">
-                    R$ {item.price}
-                  </Typography>
-                  <Typography variantStyle="body-small-bold">
-                    Quantidade: 1
-                  </Typography>
-                  <Typography variantStyle="body-small-bold">
-                    Tamanho: único
-                  </Typography>
-                  <Button onClick={() => removeFromCart(item.id)}>
-                    Excluir
-                  </Button>
-                </div>
-              </div>
+              <CartItem item={item}  removeFromCart={removeFromCart} />
             ))
           ) : (
-            <div style={{ marginTop: "15px" }}>
-              <Typography>Não existem produtos no carrinho.</Typography>
-            </div>
+            <CartEmpty />
           )}
         </div>
-        <div className={Styles.cartSummary}>
-          <Typography variantStyle="heading-small">Sumário</Typography>
-          <div className={Styles.discount}>
-            <Field
-              label="Cupom de desconto"
-              inputId="cupom"
-              inputPlaceholder="Digite o cupom"
-              buttonText="Ok"
-              onButtonClick={() => {}}
-              onChange={() => {}}
-            />
-          </div>
-          <div className={Styles.summaryResume}>
-            <Typography variantStyle="body-small-bold">
-              {cartItems.length} Produtos
-            </Typography>
-            <Typography variantStyle="body-small-bold">R$ {total}</Typography>
-            <Typography variantStyle="body-small-bold">Frete:</Typography>
-            <Typography variantStyle="body-small-bold">R$ {freight}</Typography>
-          </div>
-          <Divider style={{ borderColor: "#780BF7" }} />
-          <div className={Styles.total}>
-            <Typography variantStyle="body-large-bold">
-              <ShoppingBagIcon />
-              <span style={{ marginLeft: "4px" }}>Total:</span>
-            </Typography>
-            <Typography variantStyle="body-large-bold" className={Styles.total}>
-              R$ {total + freight}
-            </Typography>
-          </div>
-          <div className={Styles.cartActions}>
-            <Button
-              onClick={handleRedirect}
-              variant="secondary"
-              text="Continuar comprando"
-            />
-            <Button
-              onClick={() => console.log("pagamento")}
-              text="Ir para pagamento"
-            />
-          </div>
-        </div>
+        <CartSumary cartItems={cartItems} total={total} freight={freight} handleRedirect={handleRedirect} />
       </section>
     </main>
   );
