@@ -1,23 +1,19 @@
 import { ReactNode } from "react";
 import styles from "./HeroBanner.module.css";
+import { Banner, BannerProps } from "../Banner";
 
 type HeroBannerProps = {
-  backgroundImage?: string;
   mainImage?: string;
   children?: ReactNode;
-};
+} & BannerProps;
 
 const HeroBanner = ({
-  backgroundImage,
   mainImage,
   children,
+  ...props
 }: HeroBannerProps) => {
   return (
-    <section className={styles.heroBanner}>
-      <div
-        className={styles.gridOverlay}
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      ></div>
+    <Banner {...props}>
       <div className={styles.heroContent}>
         <div className={styles.mainImageWrapper}>
           <img
@@ -29,7 +25,7 @@ const HeroBanner = ({
 
         <div className={styles.textContent}>{children}</div>
       </div>
-    </section>
+    </Banner>
   );
 };
 
