@@ -1,19 +1,23 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Button from "../../components/Button";
 import Categories from "../../components/Categories";
 import HeroBanner from "../../components/HeroBanner";
 import Newsletter from "../../components/Newsletter";
 import ProductList from "../../components/ProductList";
 import Typography from "../../components/Typography";
-import { Category } from "../../common/types/category";
 import {
-  CATEGORIES_BASE_URL,
   PRODUCTS_BASE_URL,
 } from "../../common/constants/endpoints";
 import { Product } from "../../common/types/product";
 import StatusHandler from "../../common/utils/statusHandler";
 import useFetch from "../../common/hooks/useFetch";
+import useFetchCategory from "../../common/hooks/useFetchCategory";
+import { ICategoryService } from "../../common/services/ICategoryService";
+import Http from "../../common/lib/httpClient";
+import { IHttp } from "../../common/lib/httpClient/http.interface";
+import CategoryService from "../../common/services";
+
+const http: IHttp = Http();
+const service: ICategoryService = CategoryService(http);
 
 function HomePage() {
 
@@ -22,7 +26,9 @@ function HomePage() {
   };
 
   // Fetch de categorias
-  const {data: categoriesData, loading: isLoadingCategories, error: categoriesError } = useFetch<{categories: Category[]}>(CATEGORIES_BASE_URL);
+  const {categories, isLoadingCategories, categoriesError } = useFetchCategory(service);
+
+  console.log(categories, Array.isArray(categories)); 
 
   const {data: productsData, loading: isLoadingProducts, error: productsError } = useFetch<{products: Product[]}>(PRODUCTS_BASE_URL);
 
@@ -43,7 +49,7 @@ function HomePage() {
       </HeroBanner>
       <main className="container">
         <StatusHandler isLoading={isLoadingCategories} error={categoriesError}>
-          { categoriesData?.categories ? <Categories categories={categoriesData.categories} /> : null }
+          { categories ? <Categories categories={categories} /> : null }
         </StatusHandler>
 
         <StatusHandler isLoading={isLoadingProducts} error={productsError}>
